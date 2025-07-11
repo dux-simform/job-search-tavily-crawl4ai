@@ -1,0 +1,53 @@
+{
+  "query": "Python developer remote",
+  "total_jobs_found": 2,
+  "jobs": [
+    {
+      "job_title": "Python Developer",
+      "company_name": "Example Corp.",
+      "location": "Remote",
+      "salary_range": null,
+      "job_type": "Full-Time",
+      "experience_level": "Mid-Level",
+      "description": "Develop and maintain Python-based applications, collaborate with cross-functional teams, and contribute to product development.",
+      "requirements": [
+        "Python",
+        "Django",
+        "Flask",
+        "3+ years of experience"
+      ],
+      "benefits": [
+        "Health insurance",
+        "PTO",
+        "Retirement plans"
+      ],
+      "posted_date": "2023-04-15",
+      "apply_url": "https://example.com/apply",
+      "source_url": "https://www.ycombinator.com/jobs/role/software-engineer/remote"
+    },
+    {
+      "job_title": "Python Developer",
+      "company_name": "Tech Innovators Inc.",
+      "location": "Remote",
+      "salary_range": "$120,000 - $150,000",
+      "job_type": "Full-Time",
+      "experience_level": "Senior",
+      "description": "Lead Python development initiatives, design scalable systems, and mentor junior developers.",
+      "requirements": [
+        "Python",
+        "Django",
+        "Cloud services",
+        "5+ years of experience"
+      ],
+      "benefits": [
+        "Health insurance",
+        "PTO",
+        "Retirement plans"
+      ],
+      "posted_date": "2023-04-14",
+      "apply_url": "https://example.com/apply",
+      "source_url": "https://www.ycombinator.com/jobs/role/software-engineer/remote"
+    }
+  ],
+  "failed_urls": []
+}

@@ -1,0 +1,5 @@
+crawl4ai
+tavily-python
+python-dotenv
+pydantic
+asyncio
