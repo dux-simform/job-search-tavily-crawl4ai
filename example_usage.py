@@ -4,7 +4,7 @@ Simple example script showing how to use the job search engine.
 """
 
 import asyncio
-from job_search_engine import search_and_extract_jobs, format_job_results
+from job_search_engine import search_and_extract_jobs
 
 async def search_jobs_example():
     """Example of searching for jobs with user input"""
@@ -19,38 +19,52 @@ async def search_jobs_example():
         user_query = "Python developer remote"  # Default query
         print(f"Using default query: {user_query}")
     
-    # Optional: Get number of results
+    # Ask for number of jobs to return in final results
     try:
-        max_results = int(input("How many job URLs to search? (default 5): ") or "5")
+        max_jobs = int(input("How many jobs do you want in the final results? (default: all jobs found): ") or "0")
+        if max_jobs <= 0:
+            max_jobs = None  # Return all jobs
     except ValueError:
-        max_results = 5
+        max_jobs = None  # Return all jobs
+    
+    print("✨ Job enhancement is enabled by default - will crawl job application pages for comprehensive details")
     
     print(f"\n🔍 Searching for: '{user_query}'")
-    print(f"📊 Looking for up to {max_results} jobs...")
+    if max_jobs:
+        print(f"📊 Will return up to {max_jobs} jobs in final results")
+    else:
+        print(f"📊 Will return all jobs found")
     print("-" * 50)
     
     # Search for jobs
     try:
         results = await search_and_extract_jobs(
             user_query=user_query,
-            max_results=max_results,
-            days=7  # Look for jobs posted in the last 7 days
+            days=7,  # Look for jobs posted in the last 7 days
+            max_results=5,  # Number of URLs to search (default)
+            max_jobs_to_return=max_jobs  # Number of jobs to return
         )
         
         # Display results
-        print("\n" + format_job_results(results, format_type="detailed"))
+        print(f"\n🎯 Found {results.total_jobs_found} jobs!")
         
-        # Save results to file
-        filename = f"search_results_{user_query.replace(' ', '_').lower()}.json"
-        with open(filename, "w") as f:
-            f.write(results.model_dump_json(indent=2))
+        print("\n💾 Results automatically saved to output/ directory:")
+        print(f"   • Enhanced job results: output/search_results/")
         
-        print(f"\n💾 Results saved to: {filename}")
+        if results.raw_markdown_files:
+            print(f"   • Raw crawled content ({len(results.raw_markdown_files)} files):")
+            print(f"     - Main search: output/raw_crawled/")
+            print(f"     - Enhanced crawl: output/enhanced_crawled/")
+            for raw_file in results.raw_markdown_files:
+                print(f"     - {raw_file}")
         
         # Summary
         print("\n📈 Summary:")
         print(f"   • Found {results.total_jobs_found} jobs")
+        print(f"   • Enhanced {results.enhanced_jobs_count} jobs with additional details")
         print(f"   • Failed to process {len(results.failed_urls)} URLs")
+        print(f"   • Saved {len(results.raw_markdown_files)} raw content files")
+        print(f"   • All results saved in organized output/ directory structure")
         
         if results.jobs:
             companies = list(set(job.company_name for job in results.jobs if job.company_name))
@@ -66,8 +80,9 @@ async def search_jobs_example():
         print(f"❌ Error during job search: {e}")
         print("Make sure you have:")
         print("1. TAVILY_API_KEY set in your .env file")
-        print("2. Ollama running with qwen2:1.5b model")
+        print("2. AZURE_OPENAI_API_KEY set in your .env file")
         print("3. Required packages installed (crawl4ai, tavily-python, python-dotenv)")
+        print("4. Internet connection for API calls")
 
 def quick_search_examples():
     """Run some predefined searches for testing"""
@@ -91,11 +106,17 @@ def quick_search_examples():
             try:
                 results = await search_and_extract_jobs(
                     user_query=query,
-                    max_results=3,  # Limit for demo
-                    days=7
+                    days=7,
+                    max_results=5,  # Search 5 URLs for examples
+                    max_jobs_to_return=10  # Limit to 10 jobs for examples
                 )
                 
-                print(format_job_results(results, format_type="summary"))
+                print(f"🎯 Found {results.total_jobs_found} jobs for '{query}'")
+                print(f"📁 Results automatically saved to output/ directory")
+                if results.enhanced_jobs_count > 0:
+                    print(f"✨ Enhanced {results.enhanced_jobs_count} jobs with additional details")
+                if results.raw_markdown_files:
+                    print(f"📄 Raw content files: {len(results.raw_markdown_files)} files saved in output/")
                 
                 # Brief pause between searches
                 await asyncio.sleep(2)

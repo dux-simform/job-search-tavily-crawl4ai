@@ -1,0 +1,14 @@
+# Environment variables
+.env
+
+# Virtual environments
+venv/
+.venv/
+
+# Output directories and all generated files
+output/
+
+# Legacy files (if any remain)
+search_results*
+raw_crawled_*.md
+crawled_data_*.md
